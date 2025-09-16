@@ -23,13 +23,13 @@ MSA 환경에서 모바일 개통 시 발생하는 에러들을 분석하고 해
 ![검색 화면](<./assets/ms-ai-mvp1.png>)
 
 검색결과 예시
-![검색 결과](<./assets/ms-ai-mvp1.png>)
+![검색 결과](<./assets/ms-ai-mvp2.png>)
 
 검색결과 Slack 전송
-![Slack 전송](<./assets/ms-ai-mvp1.png>)
+![Slack 전송](<./assets/ms-ai-mvp3.png>)
 
 Slack 채널 메시지 화면
-![Slack 채널화면](<./assets/ms-ai-mvp1.png>)
+![Slack 채널화면](<./assets/ms-ai-mvp4.png>)
 
 ## 🛠️ 시스템 구성
 

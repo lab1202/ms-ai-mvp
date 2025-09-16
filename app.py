@@ -254,7 +254,7 @@ def render_system_status_sidebar(search_client):
 def main():
     # 헤더
     st.title("AIRA AI Assistant")
-    st.markdown("스마트폰 개통 에러 진단 및 해결 지원 서비스")
+    st.markdown("스마트폰 개통 에러 진단 및 원인분석 지원 서비스")
     
     # 클라이언트 초기화
     # st.write("🔄 시스템 초기화 중...")
