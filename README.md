@@ -11,6 +11,25 @@ MSA 환경에서 모바일 개통 시 발생하는 에러들을 분석하고 해
 - **시스템 상태 모니터링**: 실시간 관련 시스템 상태 확인 (NEW!)
 - **다양한 개통 유형 지원**: 신규개통, 번호이동, 기기변경 에러 커버
 - **직관적인 채팅 인터페이스**: Streamlit 기반의 사용자 친화적 UI
+- **Slack Webhook 연동** : 검색 결과를 Slack 채널로 전송
+
+## MVP 시나리오
+1. Teams IT상황창에서 이상 징후를 자동 감지하고, 해당 서버·서비스의 상태 정보를 수집하여 AI 기반 Root Cause 분석 (MVP에서는 Teams 대신 채팅창 입력으로 수행)
+2. 에러 현상 설명 및 조치 방법 추천
+3. Teams 종합상황창에 조치 방법 공유 (MVP는 Slack으로 대체)
+
+## 주요 화면
+검색 화면 예시
+![검색 화면](<./assets/ms-ai-mvp1.png>)
+
+검색결과 예시
+![검색 결과](<./assets/ms-ai-mvp1.png>)
+
+검색결과 Slack 전송
+![Slack 전송](<./assets/ms-ai-mvp1.png>)
+
+Slack 채널 메시지 화면
+![Slack 채널화면](<./assets/ms-ai-mvp1.png>)
 
 ## 🛠️ 시스템 구성
 
@@ -36,7 +55,7 @@ aira-system/
 
 ```bash
 # 저장소 클론 또는 파일 다운로드
-git clone <repository-url>
+git clone https://github.com/lab1202/ms-ai-mvp.git
 cd ms-ai-mvp
 
 # 새 가상환경 생성
@@ -62,12 +81,12 @@ AZURE_SEARCH_INDEX_NAME=
 ## 🚀 시스템 실행
 
 ```bash
-./streamlit.sh  # 의존성 생성 및 실행
-# 또는
+./streamlit.sh  # 실행 (의존성 생성 포함)
+# 의존성 생성이 되어있다면
 streamlit run app.py
 ```
 
-브라우저에서 `http://localhost:8000`으로 접속하여 시스템을 사용할 수 있습니다.
+로컬환경 실행 시 브라우저에서 `http://localhost:8000`으로 접속하여 시스템을 사용할 수 있습니다.
 
 ## 🔄 데이터 업데이트
 

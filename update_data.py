@@ -105,7 +105,6 @@ def load_data():
             print(f"❌ '{filename}' 파일 읽기 오류: {e}")
             continue
     
-    # print("❌ 데이터 파일을 찾을 수 없습니다.")
     return None
 
 def preprocess_data(data):
@@ -237,24 +236,24 @@ def main():
     # 환경 변수 확인
     if not check_environment():
         return False
-    print("A--->)")
+    
     # 1. 인덱스 생성
     if not create_search_index():
         return False
-    print("B--->)")
+    
     # 2. 데이터 로드
     data = load_data()
     if not data:
         return False
-    print("C--->)")
+    
     # 3. 데이터 업로드
     if not upload_data(data):
         return False
-    print("D--->)")
+    
     # 4. 업로드 검증
     if not verify_upload():
         print("⚠️ 검증에 실패했지만 일부 데이터는 업로드되었을 수 있습니다.")
-    print("E--->)")
+    
     print("=" * 60)
     print("🎉 Azure Search 데이터 업데이트 완료!")
     return True

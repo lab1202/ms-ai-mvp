@@ -6,9 +6,31 @@ from azure.search.documents import SearchClient
 from azure.core.credentials import AzureKeyCredential
 import json
 from datetime import datetime
+import requests # slack webhook용
 
 # 환경 변수 로드
 load_dotenv()
+
+# ===== Slack 알림 전송 함수 (최상단에 위치) =====
+def send_to_slack(result, webhook_url):
+    """검색 결과를 Slack으로 전송 (글자수 제한 없음)"""
+    if not webhook_url.startswith("https://hooks.slack.com/services/") or "T" not in webhook_url or "B" not in webhook_url:
+        return False, "❌ Slack Webhook URL이 올바르지 않습니다. Slack에서 발급받은 Webhook URL을 사용하세요."
+
+    # 글자수 제한 없이 전체 메시지 전송
+    message = {
+        "text": f"🔎 검색 결과 알림\n\n{result}"
+    }
+    try:
+        response = requests.post(webhook_url, json=message)
+        # Slack은 200 OK와 'ok'라는 본문을 반환해야 정상
+        if response.status_code == 200 and response.text.strip() == "ok":
+            return True, "✅ Slack으로 전송 완료"
+        else:
+            return False, f"❌ Slack 전송 실패: {response.status_code} / 응답: {response.text}"
+    except Exception as e:
+        return False, f"❌ Slack 전송 중 예외 발생: {str(e)}"
+# ===== 함수 끝 =====
 
 # 페이지 설정
 st.set_page_config(
@@ -183,9 +205,9 @@ def render_system_status_sidebar(search_client):
     with st.sidebar:
         st.header("🖥️ 시스템 상태")
         
-        # 상태 갱신 버튼
-        if st.button("🔄 상태 갱신", key="refresh_status"):
-            st.cache_resource.clear()
+        # # 상태 갱신 버튼
+        # if st.button("🔄 상태 갱신", key="refresh_status"):
+        #     st.cache_resource.clear()
         
         if not search_client:
             st.error("Search 클라이언트가 초기화되지 않았습니다.")
@@ -231,11 +253,11 @@ def render_system_status_sidebar(search_client):
 
 def main():
     # 헤더
-    st.title("📊 AIRA 이상징후 현황 조회 시스템")
-    st.markdown("MSA 환경 핸드폰 개통 에러 분석 및 해결 지원 시스템")
+    st.title("AIRA AI Assistant")
+    st.markdown("스마트폰 개통 에러 진단 및 해결 지원 서비스")
     
     # 클라이언트 초기화
-    st.write("🔄 시스템 초기화 중...")
+    # st.write("🔄 시스템 초기화 중...")
     
     try:
         openai_client = init_openai_client()
@@ -265,32 +287,32 @@ def main():
     render_system_status_sidebar(search_client)
     
     # 사이드바 - 기본 정보
-    with st.sidebar:
-        st.markdown("---")
-        st.header("📋 시스템 정보")
-        st.info("📱 신규개통\n📞 번호이동\n🔄 기기변경")
+    # with st.sidebar:
+    #     st.markdown("---")
+    #     st.header("📋 시스템 정보")
+    #     st.info("📱 신규개통\n📞 번호이동\n🔄 기기변경")
         
-        st.header("🏷️ 에러 카테고리")
-        categories = ["전체", "신규개통", "번호이동", "기기변경"]
-        selected_category = st.selectbox("카테고리 선택", categories)
+    #     st.header("🏷️ 에러 카테고리")
+    #     categories = ["전체", "신규개통", "번호이동", "기기변경"]
+    #     selected_category = st.selectbox("카테고리 선택", categories)
         
-        st.header("⚠️ 심각도")
-        severities = ["전체", "높음", "중간", "낮음"]
-        selected_severity = st.selectbox("심각도 선택", severities)
+    #     st.header("⚠️ 심각도")
+    #     severities = ["전체", "높음", "중간", "낮음"]
+    #     selected_severity = st.selectbox("심각도 선택", severities)
     
     # 채팅 인터페이스
     if "messages" not in st.session_state:
         st.session_state.messages = []
         st.session_state.messages.append({
             "role": "assistant", 
-            "content": "안녕하세요! AIRA 시스템입니다. 📱\n\nMSA 환경에서 핸드폰 개통 시 발생하는 문제점이나 에러에 대해 질문해주세요.\n\n**예시 질문:**\n- '신규개통 시 본인인증이 안 돼요'\n- 'MSA-001 에러가 발생했어요'\n- '번호이동 중에 오류가 생겼어요'\n- '시스템 상태는 어떤가요?'"
+            "content": "안녕하세요! AIRA 시스템입니다. \n\nMSA 환경에서 핸드폰 개통 시 발생하는 문제점이나 에러에 대해 질문해주세요.\n\n**예시 질문:**\n- '신규개통 시 본인인증이 안 돼요'\n- 'MSA-001 에러가 발생했어요'\n- '번호이동 중에 오류가 생겼어요'\n- '시스템 상태는 어떤가요?'"
         })
-    
+
     # 채팅 메시지 표시
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-    
+
     # 사용자 입력
     if prompt := st.chat_input("에러나 문제 상황을 입력해주세요"):
         # 사용자 메시지 추가
@@ -309,7 +331,6 @@ def main():
                 if search_results:
                     st.markdown("---")
                     st.markdown("### 📋 관련 에러 정보")
-                    
                     for i, result in enumerate(search_results, 1):
                         with st.expander(f"📸 {result.get('error_code', 'N/A')} - {result.get('error_name', 'N/A')}"):
                             col1, col2 = st.columns([1, 1])
@@ -340,22 +361,35 @@ def main():
         
         # 어시스턴트 응답 저장
         st.session_state.messages.append({"role": "assistant", "content": response})
-    
-    # 하단 컨트롤
-    col1, col2, col3 = st.columns([1, 1, 1])
-    
-    with col1:
-        if st.button("💬 채팅 초기화"):
+
+    # 하단 버튼
+    slack_webhook_url = os.getenv("SLACK_WEBHOOK_URL", "")
+    btn1, btn2, btn3, _ = st.columns([2, 2, 2, 0.5])
+
+    with btn1:
+        if st.button("🆂 Slack으로 결과 전송", key="send_to_slack_btn_main"):
+            assistant_messages = [m for m in st.session_state.messages if m["role"] == "assistant"]
+            if not slack_webhook_url:
+                st.error("SLACK_WEBHOOK_URL이 설정되지 않았습니다.")
+            elif not assistant_messages:
+                st.error("전송할 assistant 응답이 없습니다.")
+            else:
+                latest_response = assistant_messages[-1]["content"]
+                ok, msg = send_to_slack(latest_response, slack_webhook_url)
+                if ok:
+                    st.success(msg)
+                else:
+                    st.error(msg)
+                    st.code(latest_response, language="markdown")
+                    st.code(slack_webhook_url, language="text")
+
+    with btn2:
+        if st.button("💬 채팅 초기화", key="reset_chat_btn"):
             st.session_state.messages = []
             st.rerun()
-    
-    with col2:
-        if st.button("📊 데이터 갱신"):
-            st.cache_resource.clear()
-            st.success("데이터가 갱신되었습니다.")
-    
-    with col3:
-        if st.button("ℹ️ 도움말"):
+
+    with btn3:
+        if st.button("ℹ️ 도움말", key="help_btn"):
             st.info("**사용법:**\n1. 에러 코드나 증상을 입력하세요\n2. AI가 관련 정보를 검색하여 해결책을 제공합니다\n3. 사이드바에서 실시간 시스템 상태를 확인하세요")
 
 if __name__ == "__main__":
