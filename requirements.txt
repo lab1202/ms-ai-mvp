@@ -1,0 +1,10 @@
+# 버전호환성 문제로 proxies 사용하는 부분이 없는데 에러남
+streamlit==1.31.0
+openai==1.12.0
+python-dotenv==1.0.1
+requests==2.32.5
+requests-oauthlib==2.0.0
+urllib3==2.5.0
+azure-identity==1.12.0
+azure-search-documents==11.3.0
+azure-core==1.26.4

@@ -1,0 +1,1203 @@
+[
+  {
+    "id": "1",
+    "error_code": "MSA-001",
+    "error_name": "고객정보 검증 실패",
+    "description": "신규개통 시 고객 본인인증 서비스에서 신분증 정보와 입력 정보가 불일치하여 발생하는 에러",
+    "symptoms": "본인인증 단계에서 '고객정보를 확인할 수 없습니다' 메시지 출력",
+    "solution": "1. 고객에게 신분증 재확인 요청 2. 주민등록번호, 이름, 주소 정확성 검증 3. 필요시 신분증 사본 요청 4. 시스템 재시도",
+    "category": "신규개통",
+    "severity": "높음",
+    "related_systems": "본인인증API, 고객정보DB, 신용조회시스템",
+    "occurred_at": "2025-09-14T09:23:15Z",
+    "system_status": {
+      "본인인증API": "정상",
+      "고객정보DB": "정상",
+      "신용조회시스템": "정상",
+      "네트워크": "정상"
+    },
+    "system_resources": {
+      "본인인증API": {
+        "cpu_usage": "72%",
+        "memory_usage": "68%",
+        "response_time": "1.2s",
+        "throughput": "850 req/min"
+      },
+      "고객정보DB": {
+        "cpu_usage": "45%",
+        "memory_usage": "82%",
+        "disk_usage": "67%",
+        "connection_pool": "78/100"
+      },
+      "신용조회시스템": {
+        "cpu_usage": "55%",
+        "memory_usage": "63%",
+        "response_time": "2.1s",
+        "queue_length": "15"
+      }
+    },
+    "monitoring_points": "본인인증API 응답시간, 고객정보DB 커넥션, 신용조회 성공률",
+    "prevention": "정기적인 본인인증API 헬스체크, 고객정보 동기화 상태 모니터링"
+  },
+  {
+    "id": "2", 
+    "error_code": "MSA-002",
+    "error_name": "번호 포팅 조회 실패",
+    "description": "번호이동 시 기존 통신사의 포팅 서버 연동 오류로 발생하는 에러",
+    "symptoms": "번호이동 신청 시 '기존 통신사 정보를 조회할 수 없습니다' 에러 발생",
+    "solution": "1. 기존 통신사 포팅 서버 상태 확인 2. 고객 명의 및 계약 정보 재확인 3. 포팅 승인번호 재발급 요청 4. 수동 포팅 절차 진행",
+    "category": "번호이동", 
+    "severity": "중간",
+    "related_systems": "포팅센터API, KT포팅서버, SKT포팅서버, LGU포팅서버",
+    "occurred_at": "2025-09-12T14:47:32Z",
+    "system_status": {
+      "포팅센터API": "정상",
+      "KT포팅서버": "지연",
+      "SKT포팅서버": "정상", 
+      "LGU포팅서버": "정상",
+      "네트워크": "정상"
+    },
+    "system_resources": {
+      "포팅센터API": {
+        "cpu_usage": "58%",
+        "memory_usage": "71%",
+        "response_time": "0.8s",
+        "throughput": "1200 req/min"
+      },
+      "KT포팅서버": {
+        "cpu_usage": "89%",
+        "memory_usage": "94%",
+        "response_time": "5.3s",
+        "error_rate": "12%"
+      },
+      "SKT포팅서버": {
+        "cpu_usage": "34%",
+        "memory_usage": "52%",
+        "response_time": "1.1s",
+        "throughput": "950 req/min"
+      }
+    },
+    "monitoring_points": "포팅센터 응답시간, 각 통신사별 포팅 성공률, API 호출 빈도",
+    "prevention": "통신사별 포팅서버 상태 실시간 모니터링, 백업 포팅 경로 구축"
+  },
+  {
+    "id": "3",
+    "error_code": "MSA-003", 
+    "error_name": "USIM 활성화 실패",
+    "description": "기기변경 시 새로운 USIM 카드의 HLR 등록 과정에서 발생하는 오류",
+    "symptoms": "기기변경 후 '네트워크에 등록할 수 없습니다' 메시지가 지속적으로 표시",
+    "solution": "1. USIM 카드 재삽입 확인 2. HLR 서버 동기화 재시도 3. USIM 카드 불량 여부 확인 4. 새 USIM 카드로 교체",
+    "category": "기기변경",
+    "severity": "중간",
+    "related_systems": "소프트웨어호환성검증시스템, APN관리시스템, 펌웨어배포시스템",
+    "occurred_at": "2025-09-13T09:05:47Z",
+    "system_status": {
+      "소프트웨어호환성검증시스템": "정상",
+      "APN관리시스템": "정상",
+      "펌웨어배포시스템": "정상",
+      "제조사업데이트서버": "정상"
+    },
+    "system_resources": {
+      "소프트웨어호환성검증시스템": {
+        "cpu_usage": "45%",
+        "memory_usage": "51%",
+        "compatibility_checks": "420/hour",
+        "database_updates": "일일 2회"
+      },
+      "APN관리시스템": {
+        "cpu_usage": "32%",
+        "memory_usage": "38%",
+        "configuration_rate": "95.7%",
+        "profile_distribution": "자동화"
+      },
+      "펌웨어배포시스템": {
+        "cpu_usage": "58%",
+        "memory_usage": "64%",
+        "download_bandwidth": "2.1Gbps",
+        "distribution_success": "96.8%"
+      }
+    },
+    "monitoring_points": "소프트웨어 호환성 검증률, APN 설정 성공률, 펌웨어 배포 완료율",
+    "prevention": "신규 펌웨어 출시 시 사전 호환성 테스트, APN 설정 자동화"
+  },
+  {
+    "id": "27",
+    "error_code": "MSA-027",
+    "error_name": "데이터 백업 복원 실패",
+    "description": "기기변경 시 기존 데이터 백업 파일의 복원 과정에서 발생하는 문제",
+    "symptoms": "데이터 복원 중 '백업 파일을 읽을 수 없습니다' 오류",
+    "solution": "1. 백업 파일 무결성 확인 2. 클라우드 동기화 상태 점검 3. 수동 데이터 이전 4. 부분 복원 시도",
+    "category": "기기변경",
+    "severity": "낮음",
+    "related_systems": "데이터백업시스템, 클라우드스토리지, 복원관리시스템",
+    "occurred_at": "2025-09-04T18:27:34Z",
+    "system_status": {
+      "데이터백업시스템": "정상",
+      "클라우드스토리지": "정상",
+      "복원관리시스템": "정상",
+      "암호화시스템": "정상"
+    },
+    "system_resources": {
+      "데이터백업시스템": {
+        "cpu_usage": "41%",
+        "memory_usage": "47%",
+        "backup_volume": "12.3TB/day",
+        "success_rate": "98.1%"
+      },
+      "클라우드스토리지": {
+        "cpu_usage": "29%",
+        "memory_usage": "35%",
+        "storage_capacity": "850TB/1PB",
+        "transfer_speed": "1.2Gbps"
+      },
+      "복원관리시스템": {
+        "cpu_usage": "36%",
+        "memory_usage": "42%",
+        "restoration_rate": "320 cases/hour",
+        "data_integrity": "99.7%"
+      }
+    },
+    "monitoring_points": "백업 성공률, 복원 완료율, 데이터 무결성 검증률",
+    "prevention": "정기적 백업 파일 무결성 검사, 다중 백업 경로 구축"
+  },
+  {
+    "id": "28",
+    "error_code": "MSA-028",
+    "error_name": "기기 보안 설정 충돌",
+    "description": "새 기기의 보안 정책과 통신사 보안 요구사항 간의 충돌",
+    "symptoms": "보안 앱 설치 시 '이 기기에서 지원되지 않는 보안 정책입니다' 메시지",
+    "solution": "1. 기기 보안 설정 확인 2. 통신사 보안 앱 재설치 3. 보안 정책 예외 승인 4. 대체 보안 솔루션 적용",
+    "category": "기기변경",
+    "severity": "중간",
+    "related_systems": "보안정책관리시스템, 기기보안검증시스템, 보안앱배포시스템",
+    "occurred_at": "2025-09-15T14:42:16Z",
+    "system_status": {
+      "보안정책관리시스템": "정상",
+      "기기보안검증시스템": "정상",
+      "보안앱배포시스템": "정상",
+      "보안인증서버": "정상"
+    },
+    "system_resources": {
+      "보안정책관리시스템": {
+        "cpu_usage": "44%",
+        "memory_usage": "50%",
+        "policy_enforcement": "2100 devices",
+        "compliance_rate": "97.3%"
+      },
+      "기기보안검증시스템": {
+        "cpu_usage": "52%",
+        "memory_usage": "58%",
+        "security_scans": "580/hour",
+        "threat_detection": "실시간"
+      },
+      "보안앱배포시스템": {
+        "cpu_usage": "38%",
+        "memory_usage": "44%",
+        "app_installations": "750/hour",
+        "update_success": "96.1%"
+      }
+    },
+    "monitoring_points": "보안 정책 적용률, 보안 앱 설치 성공률, 보안 충돌 발생빈도",
+    "prevention": "기기별 보안 정책 매트릭스 구축, 보안 설정 자동 최적화"
+  },
+  {
+    "id": "29",
+    "error_code": "MSA-029",
+    "error_name": "서비스 활성화 지연",
+    "description": "개통 완료 후 음성, 데이터, 문자 서비스 활성화가 지연되는 문제",
+    "symptoms": "개통 후 '서비스 준비 중입니다' 메시지가 장시간 지속",
+    "solution": "1. 서비스 활성화 상태 확인 2. 네트워크 프로비저닝 재시도 3. 수동 서비스 활성화 4. 기기 재부팅 안내",
+    "category": "신규개통,번호이동,기기변경",
+    "severity": "중간",
+    "related_systems": "서비스활성화시스템, 프로비저닝시스템, 네트워크관리시스템",
+    "occurred_at": "2025-09-06T12:38:21Z",
+    "system_status": {
+      "서비스활성화시스템": "높은부하",
+      "프로비저닝시스템": "정상",
+      "네트워크관리시스템": "정상",
+      "과금연동시스템": "정상"
+    },
+    "system_resources": {
+      "서비스활성화시스템": {
+        "cpu_usage": "88%",
+        "memory_usage": "85%",
+        "activation_queue": "156",
+        "processing_delay": "3.7 minutes"
+      },
+      "프로비저닝시스템": {
+        "cpu_usage": "67%",
+        "memory_usage": "72%",
+        "provisioning_rate": "1200/hour",
+        "success_rate": "98.4%"
+      },
+      "네트워크관리시스템": {
+        "cpu_usage": "54%",
+        "memory_usage": "61%",
+        "network_sync": "실시간",
+        "configuration_accuracy": "99.2%"
+      }
+    },
+    "monitoring_points": "서비스 활성화 처리시간, 프로비저닝 성공률, 네트워크 동기화 상태",
+    "prevention": "서비스 활성화 처리 용량 증설, 프로비저닝 프로세스 최적화"
+  },
+  {
+    "id": "30",
+    "error_code": "MSA-030",
+    "error_name": "고객정보 동기화 실패",
+    "description": "여러 시스템 간 고객정보 동기화 과정에서 발생하는 데이터 불일치",
+    "symptoms": "개통 후 고객정보가 시스템별로 다르게 표시되는 현상",
+    "solution": "1. 마스터 데이터 확인 2. 동기화 프로세스 재실행 3. 수동 데이터 정합성 조정 4. 시스템별 캐시 초기화",
+    "category": "신규개통,번호이동,기기변경",
+    "severity": "중간",
+    "related_systems": "마스터데이터관리시스템, 데이터동기화시스템, 고객정보통합DB",
+    "occurred_at": "2025-09-09T11:20:59Z",
+    "system_status": {
+      "마스터데이터관리시스템": "정상",
+      "데이터동기화시스템": "일시적오류",
+      "고객정보통합DB": "정상",
+      "실시간복제시스템": "지연"
+    },
+    "system_resources": {
+      "마스터데이터관리시스템": {
+        "cpu_usage": "51%",
+        "memory_usage": "57%",
+        "data_volume": "350M records",
+        "update_frequency": "실시간"
+      },
+      "데이터동기화시스템": {
+        "cpu_usage": "74%",
+        "memory_usage": "79%",
+        "sync_backlog": "2340 records",
+        "error_rate": "3.2%"
+      },
+      "고객정보통합DB": {
+        "cpu_usage": "62%",
+        "memory_usage": "68%",
+        "database_size": "78TB",
+        "replication_lag": "45 seconds"
+      }
+    },
+    "monitoring_points": "데이터 동기화 지연시간, 정합성 오류 발생률, 시스템별 데이터 일치율",
+    "prevention": "실시간 데이터 동기화 모니터링, 데이터 정합성 자동 검증"
+  },
+  {
+    "id": "4",
+    "error_code": "MSA-004",
+    "error_name": "요금제 적용 오류", 
+    "description": "신규개통 또는 번호이동 시 선택한 요금제가 고객 계정에 정상 적용되지 않는 오류",
+    "symptoms": "개통 완료 후 요금제 정보가 '기본 요금제'로 설정되어 있음",
+    "solution": "1. 고객이 선택한 요금제 재확인 2. 과금 시스템 동기화 상태 점검 3. 요금제 수동 적용 4. 차액 정산 처리",
+    "category": "신규개통,번호이동",
+    "severity": "중간",
+    "related_systems": "과금시스템, 요금제DB, 고객관리시스템, 동기화서버",
+    "occurred_at": "2025-09-05T11:34:27Z",
+    "system_status": {
+      "과금시스템": "정상",
+      "요금제DB": "정상",
+      "고객관리시스템": "정상",
+      "동기화서버": "일시적오류"
+    },
+    "system_resources": {
+      "과금시스템": {
+        "cpu_usage": "62%",
+        "memory_usage": "69%",
+        "billing_rate": "1850 bills/min",
+        "batch_processing": "정상"
+      },
+      "요금제DB": {
+        "cpu_usage": "38%",
+        "memory_usage": "45%",
+        "query_response_time": "0.3s",
+        "cache_hit_rate": "94%"
+      },
+      "동기화서버": {
+        "cpu_usage": "78%",
+        "memory_usage": "83%",
+        "sync_delay": "45s",
+        "failed_sync_count": "12"
+      }
+    },
+    "monitoring_points": "과금시스템 동기화 상태, 요금제 적용 성공률, 데이터 정합성",
+    "prevention": "실시간 동기화 모니터링, 요금제 적용 후 자동 검증 프로세스"
+  },
+  {
+    "id": "5",
+    "error_code": "MSA-005",
+    "error_name": "기기 호환성 검증 실패",
+    "description": "기기변경 시 새로운 기기가 현재 요금제나 서비스와 호환되지 않아 발생하는 오류",
+    "symptoms": "기기변경 진행 시 '선택하신 기기는 현재 요금제와 호환되지 않습니다' 경고 메시지",
+    "solution": "1. 기기 스펙 및 지원 주파수 확인 2. 요금제 호환성 재검토 3. 대체 요금제 제안 4. 기기 펌웨어 업데이트 안내",
+    "category": "기기변경",
+    "severity": "낮음",
+    "related_systems": "기기정보DB, 호환성검증시스템, 요금제DB",
+    "occurred_at": "2025-09-16T08:19:53Z",
+    "system_status": {
+      "기기정보DB": "정상",
+      "호환성검증시스템": "정상",
+      "요금제DB": "정상",
+      "제조사API": "정상"
+    },
+    "system_resources": {
+      "기기정보DB": {
+        "cpu_usage": "29%",
+        "memory_usage": "41%",
+        "query_time": "0.2s",
+        "database_size": "2.3TB"
+      },
+      "호환성검증시스템": {
+        "cpu_usage": "35%",
+        "memory_usage": "47%",
+        "verification_rate": "450 checks/min",
+        "accuracy": "98.7%"
+      },
+      "제조사API": {
+        "cpu_usage": "52%",
+        "memory_usage": "59%",
+        "response_time": "1.8s",
+        "api_calls": "320/hour"
+      }
+    },
+    "monitoring_points": "기기정보 업데이트 주기, 호환성 검증 정확도, 신규 기기 등록 속도",
+    "prevention": "신규 기기 출시 시 사전 호환성 테스트, 정기적 기기정보 업데이트"
+  },
+  {
+    "id": "6",
+    "error_code": "MSA-006", 
+    "error_name": "결제수단 검증 실패",
+    "description": "개통 시 등록한 결제수단(카드, 계좌)의 유효성 검증에 실패하여 발생하는 오류",
+    "symptoms": "결제 정보 입력 후 '결제수단을 확인할 수 없습니다' 오류 발생",
+    "solution": "1. 카드/계좌 정보 재입력 요청 2. 금융기관 시스템 연동 상태 확인 3. 대체 결제수단 등록 4. 후불 결제 옵션 제공",
+    "category": "신규개통,번호이동,기기변경",
+    "severity": "높음",
+    "related_systems": "결제게이트웨이, 금융기관API, 카드사시스템, 은행시스템",
+    "occurred_at": "2025-09-03T13:28:11Z",
+    "system_status": {
+      "결제게이트웨이": "정상",
+      "금융기관API": "일부지연",
+      "카드사시스템": "정상",
+      "은행시스템": "정상"
+    },
+    "system_resources": {
+      "결제게이트웨이": {
+        "cpu_usage": "74%",
+        "memory_usage": "71%",
+        "transaction_volume": "3200 tps",
+        "success_rate": "97.8%"
+      },
+      "금융기관API": {
+        "cpu_usage": "86%",
+        "memory_usage": "79%",
+        "response_time": "2.7s",
+        "timeout_rate": "5.2%"
+      },
+      "카드사시스템": {
+        "cpu_usage": "49%",
+        "memory_usage": "56%",
+        "approval_rate": "96.1%",
+        "processing_time": "1.4s"
+      }
+    },
+    "monitoring_points": "결제 성공률, 금융기관별 응답시간, 결제 승인 지연시간",
+    "prevention": "다중 결제 경로 구축, 금융기관별 상태 모니터링, 결제 재시도 로직"
+  },
+  {
+    "id": "7",
+    "error_code": "MSA-007",
+    "error_name": "재고 부족 오류",
+    "description": "선택한 기기나 USIM의 재고가 부족하여 개통 프로세스를 완료할 수 없는 상황",
+    "symptoms": "기기 선택 시 '선택하신 상품의 재고가 부족합니다' 메시지 표시",
+    "solution": "1. 대체 기기 옵션 제안 2. 재고 입고 예정일 안내 3. 사전 예약 서비스 제공 4. 타 지점 재고 확인",
+    "category": "신규개통,기기변경",
+    "severity": "중간",
+    "related_systems": "재고관리시스템, 물류시스템, 매장관리시스템, ERP시스템",
+    "occurred_at": "2025-09-11T17:42:19Z",
+    "system_status": {
+      "재고관리시스템": "정상",
+      "물류시스템": "정상",
+      "매장관리시스템": "정상",
+      "ERP시스템": "정상"
+    },
+    "system_resources": {
+      "재고관리시스템": {
+        "cpu_usage": "41%",
+        "memory_usage": "53%",
+        "inventory_updates": "890/min",
+        "real_time_sync": "99.2%"
+      },
+      "물류시스템": {
+        "cpu_usage": "38%",
+        "memory_usage": "44%",
+        "shipment_tracking": "1240 items",
+        "delivery_accuracy": "98.5%"
+      },
+      "ERP시스템": {
+        "cpu_usage": "56%",
+        "memory_usage": "67%",
+        "batch_processing": "진행중",
+        "data_integration": "정상"
+      }
+    },
+    "monitoring_points": "실시간 재고 수준, 재고 회전율, 품절 예측 정확도",
+    "prevention": "AI 기반 재고 예측, 안전재고 수준 관리, 자동 발주 시스템"
+  },
+  {
+    "id": "8",
+    "error_code": "MSA-008",
+    "error_name": "네트워크 연동 타임아웃",
+    "description": "외부 시스템(포팅, 본인인증, 금융기관) 연동 시 응답 시간 초과로 발생하는 오류",
+    "symptoms": "처리 중 화면에서 장시간 대기 후 '시스템 연결에 실패했습니다' 메시지",
+    "solution": "1. 네트워크 연결 상태 확인 2. 외부 시스템 가용성 점검 3. 처리 재시도 4. 수동 처리 절차 진행",
+    "category": "신규개통,번호이동,기기변경", 
+    "severity": "중간",
+    "related_systems": "로드밸런서, 네트워크스위치, 방화벽, 외부API게이트웨이",
+    "occurred_at": "2025-09-07T10:15:36Z",
+    "system_status": {
+      "로드밸런서": "정상",
+      "네트워크스위치": "높은부하",
+      "방화벽": "정상",
+      "외부API게이트웨이": "일시적오류"
+    },
+    "system_resources": {
+      "로드밸런서": {
+        "cpu_usage": "73%",
+        "memory_usage": "68%",
+        "concurrent_connections": "8500/10000",
+        "request_rate": "4200 req/sec"
+      },
+      "네트워크스위치": {
+        "cpu_usage": "89%",
+        "memory_usage": "82%",
+        "bandwidth_usage": "7.8Gbps/10Gbps",
+        "packet_loss": "0.1%"
+      },
+      "외부API게이트웨이": {
+        "cpu_usage": "95%",
+        "memory_usage": "91%",
+        "timeout_rate": "8.3%",
+        "circuit_breaker": "OPEN"
+      }
+    },
+    "monitoring_points": "API 응답시간, 네트워크 대역폭 사용률, 연결 실패율",
+    "prevention": "네트워크 대역폭 증설, 타임아웃 설정 최적화, 회로 이중화"
+  },
+  {
+    "id": "9",
+    "error_code": "MSA-009",
+    "error_name": "신용정보 조회 실패",
+    "description": "신규개통 시 고객의 신용정보 조회 서비스 오류로 인한 개통 차단",
+    "symptoms": "신용조회 단계에서 '신용정보를 확인할 수 없습니다' 메시지 표시",
+    "solution": "1. 신용정보원 시스템 상태 확인 2. 고객 동의서 재확인 3. 수동 신용조회 요청 4. 보증금 개통 옵션 제안",
+    "category": "신규개통",
+    "severity": "높음",
+    "related_systems": "신용정보원API, 신용평가시스템, 고객동의관리시스템",
+    "occurred_at": "2025-09-02T15:51:42Z",
+    "system_status": {
+      "신용정보원API": "점검중",
+      "신용평가시스템": "정상",
+      "고객동의관리시스템": "정상",
+      "암호화모듈": "정상"
+    },
+    "system_resources": {
+      "신용정보원API": {
+        "cpu_usage": "0%",
+        "memory_usage": "0%",
+        "status": "점검중",
+        "scheduled_downtime": "14:00-16:00"
+      },
+      "신용평가시스템": {
+        "cpu_usage": "34%",
+        "memory_usage": "42%",
+        "evaluation_rate": "650 cases/hour",
+        "accuracy": "97.2%"
+      },
+      "암호화모듈": {
+        "cpu_usage": "28%",
+        "memory_usage": "31%",
+        "encryption_rate": "1200 ops/sec",
+        "key_rotation": "정상"
+      }
+    },
+    "monitoring_points": "신용조회 성공률, API 응답시간, 개인정보 보안 상태",
+    "prevention": "신용정보원 점검 일정 사전 공지, 대체 신용조회 루트 확보"
+  },
+  {
+    "id": "10",
+    "error_code": "MSA-010",
+    "error_name": "중복 가입 방지 오류",
+    "description": "동일 고객이 이미 가입된 상태에서 중복 신규개통을 시도할 때 발생",
+    "symptoms": "개통 신청 시 '이미 가입된 고객입니다' 경고 메시지 출력",
+    "solution": "1. 기존 가입 정보 확인 2. 해지 여부 점검 3. 추가 회선 개통 안내 4. 명의 변경 절차 제안",
+    "category": "신규개통",
+    "severity": "중간",
+    "related_systems": "고객정보DB, 중복체크시스템, 계약관리시스템",
+    "occurred_at": "2025-09-13T12:07:28Z",
+    "system_status": {
+      "고객정보DB": "정상",
+      "중복체크시스템": "정상",
+      "계약관리시스템": "정상",
+      "데이터동기화": "정상"
+    },
+    "system_resources": {
+      "고객정보DB": {
+        "cpu_usage": "58%",
+        "memory_usage": "73%",
+        "active_connections": "234/300",
+        "query_cache_hit": "89%"
+      },
+      "중복체크시스템": {
+        "cpu_usage": "31%",
+        "memory_usage": "39%",
+        "check_rate": "780 checks/min",
+        "false_positive_rate": "0.3%"
+      },
+      "계약관리시스템": {
+        "cpu_usage": "47%",
+        "memory_usage": "54%",
+        "contract_processing": "290 contracts/hour",
+        "data_consistency": "99.8%"
+      }
+    },
+    "monitoring_points": "중복 검출 정확도, 고객정보 동기화 상태, 검색 성능",
+    "prevention": "실시간 고객정보 동기화, 중복 검출 알고리즘 고도화"
+  },
+  {
+    "id": "11",
+    "error_code": "MSA-011",
+    "error_name": "통신비 미납 이력 확인",
+    "description": "과거 통신비 미납 이력으로 인한 신규개통 제한 상황",
+    "symptoms": "개통 진행 시 '통신비 미납 이력이 확인됩니다' 안내 메시지",
+    "solution": "1. 미납 내역 상세 조회 2. 미납금 납부 안내 3. 분할납부 계획 수립 4. 보증금 납부 후 개통",
+    "category": "신규개통",
+    "severity": "높음",
+    "related_systems": "미납관리시스템, 요금정산시스템, 신용관리시스템",
+    "occurred_at": "2025-09-06T14:33:17Z",
+    "system_status": {
+      "미납관리시스템": "정상",
+      "요금정산시스템": "정상",
+      "신용관리시스템": "정상",
+      "통합과금시스템": "정상"
+    },
+    "system_resources": {
+      "미납관리시스템": {
+        "cpu_usage": "42%",
+        "memory_usage": "48%",
+        "outstanding_cases": "8750",
+        "collection_rate": "73.2%"
+      },
+      "요금정산시스템": {
+        "cpu_usage": "61%",
+        "memory_usage": "69%",
+        "settlement_volume": "4.2M transactions",
+        "processing_delay": "12 minutes"
+      },
+      "신용관리시스템": {
+        "cpu_usage": "39%",
+        "memory_usage": "44%",
+        "credit_score_updates": "1200/hour",
+        "risk_assessment": "자동화"
+      }
+    },
+    "monitoring_points": "미납 이력 조회 속도, 정산 데이터 정확도, 납부 처리 시간",
+    "prevention": "미납 예방 알림 시스템, 자동 분할납부 옵션 제공"
+  },
+  {
+    "id": "12",
+    "error_code": "MSA-012",
+    "error_name": "가족 관계 확인 실패",
+    "description": "가족 요금제 신청 시 가족 관계 증명 서류 검증 오류",
+    "symptoms": "가족 요금제 선택 시 '가족 관계를 확인할 수 없습니다' 메시지",
+    "solution": "1. 가족관계증명서 재확인 2. 주민등록등본 요청 3. 법정대리인 동의서 확인 4. 개별 요금제 전환",
+    "category": "신규개통",
+    "severity": "중간",
+    "related_systems": "가족관계검증시스템, 주민등록DB연동, 서류인증시스템",
+    "occurred_at": "2025-09-15T09:41:05Z",
+    "system_status": {
+      "가족관계검증시스템": "정상",
+      "주민등록DB연동": "지연",
+      "서류인증시스템": "정상",
+      "OCR인식시스템": "정상"
+    },
+    "system_resources": {
+      "가족관계검증시스템": {
+        "cpu_usage": "45%",
+        "memory_usage": "52%",
+        "verification_rate": "340 cases/hour",
+        "accuracy": "94.7%"
+      },
+      "주민등록DB연동": {
+        "cpu_usage": "78%",
+        "memory_usage": "85%",
+        "response_delay": "3.8s",
+        "connection_pool": "95/100"
+      },
+      "OCR인식시스템": {
+        "cpu_usage": "63%",
+        "memory_usage": "71%",
+        "recognition_accuracy": "97.3%",
+        "processing_time": "2.1s"
+      }
+    },
+    "monitoring_points": "서류 인증 성공률, OCR 인식 정확도, 공공DB 연동 상태",
+    "prevention": "다중 인증 경로 구축, AI 기반 서류 진위 판별 강화"
+  },
+  {
+    "id": "13",
+    "error_code": "MSA-013",
+    "error_name": "외국인 등록번호 검증 실패",
+    "description": "외국인 고객의 등록번호 또는 여권정보 검증 과정에서 발생하는 오류",
+    "symptoms": "외국인 정보 입력 시 '등록번호를 확인할 수 없습니다' 오류 발생",
+    "solution": "1. 외국인등록증 재확인 2. 여권 정보 대조 3. 출입국사무소 연동 상태 점검 4. 수동 검증 절차 진행",
+    "category": "신규개통",
+    "severity": "중간",
+    "related_systems": "출입국청API, 외국인등록시스템, 여권검증시스템",
+    "occurred_at": "2025-09-04T11:22:49Z",
+    "system_status": {
+      "출입국청API": "정상",
+      "외국인등록시스템": "정상",
+      "여권검증시스템": "일시적오류",
+      "국제연동시스템": "정상"
+    },
+    "system_resources": {
+      "출입국청API": {
+        "cpu_usage": "52%",
+        "memory_usage": "48%",
+        "response_time": "1.6s",
+        "daily_quota": "8500/10000"
+      },
+      "외국인등록시스템": {
+        "cpu_usage": "37%",
+        "memory_usage": "43%",
+        "verification_rate": "180 cases/hour",
+        "database_sync": "정상"
+      },
+      "여권검증시스템": {
+        "cpu_usage": "71%",
+        "memory_usage": "79%",
+        "error_rate": "7.2%",
+        "retry_queue": "45"
+      }
+    },
+    "monitoring_points": "출입국청 API 응답률, 외국인 인증 성공률, 여권 진위 확인율",
+    "prevention": "출입국청 시스템 상태 실시간 모니터링, 수동 검증 프로세스 표준화"
+  },
+  {
+    "id": "14",
+    "error_code": "MSA-014",
+    "error_name": "법인 사업자번호 검증 오류",
+    "description": "법인 고객의 사업자등록번호 진위 확인 과정에서 발생하는 문제",
+    "symptoms": "법인 정보 입력 시 '사업자번호가 유효하지 않습니다' 메시지",
+    "solution": "1. 사업자등록증 원본 확인 2. 국세청 시스템 연동 점검 3. 휴폐업 여부 확인 4. 법인 인감증명서 요청",
+    "category": "신규개통",
+    "severity": "높음",
+    "related_systems": "국세청API, 사업자등록시스템, 법인정보DB",
+    "occurred_at": "2025-09-09T16:18:33Z",
+    "system_status": {
+      "국세청API": "정상",
+      "사업자등록시스템": "정상",
+      "법인정보DB": "정상",
+      "휴폐업조회시스템": "정상"
+    },
+    "system_resources": {
+      "국세청API": {
+        "cpu_usage": "41%",
+        "memory_usage": "46%",
+        "api_calls": "2400/hour",
+        "success_rate": "98.1%"
+      },
+      "사업자등록시스템": {
+        "cpu_usage": "33%",
+        "memory_usage": "39%",
+        "verification_time": "0.8s",
+        "database_size": "1.2TB"
+      },
+      "법인정보DB": {
+        "cpu_usage": "48%",
+        "memory_usage": "55%",
+        "query_performance": "0.4s",
+        "data_freshness": "실시간"
+      }
+    },
+    "monitoring_points": "국세청 API 호출 성공률, 사업자 검증 정확도, 법인정보 업데이트 주기",
+    "prevention": "국세청 시스템 정기 연동 테스트, 법인정보 실시간 동기화"
+  },
+  {
+    "id": "15",
+    "error_code": "MSA-015",
+    "error_name": "미성년자 법정대리인 동의 오류",
+    "description": "미성년자 개통 시 법정대리인 동의 절차 처리 중 발생하는 문제",
+    "symptoms": "미성년자 개통 시 '법정대리인 동의를 확인할 수 없습니다' 메시지",
+    "solution": "1. 법정대리인 신분 확인 2. 가족관계증명서 점검 3. 동의서 서명 재확인 4. 전화 동의 절차 진행",
+    "category": "신규개통",
+    "severity": "높음",
+    "related_systems": "법정대리인인증시스템, 전자서명시스템, 통화녹음시스템",
+    "occurred_at": "2025-09-01T13:45:22Z",
+    "system_status": {
+      "법정대리인인증시스템": "정상",
+      "전자서명시스템": "정상", 
+      "통화녹음시스템": "정상",
+      "동의관리시스템": "정상"
+    },
+    "system_resources": {
+      "법정대리인인증시스템": {
+        "cpu_usage": "36%",
+        "memory_usage": "42%",
+        "authentication_rate": "120 cases/hour",
+        "verification_accuracy": "96.8%"
+      },
+      "전자서명시스템": {
+        "cpu_usage": "29%",
+        "memory_usage": "34%",
+        "signature_processing": "450 signatures/hour",
+        "certificate_validation": "정상"
+      },
+      "통화녹음시스템": {
+        "cpu_usage": "54%",
+        "memory_usage": "61%",
+        "storage_usage": "78%",
+        "recording_quality": "HD"
+      }
+    },
+    "monitoring_points": "법정대리인 인증 성공률, 전자서명 완료율, 통화 동의 처리시간",
+    "prevention": "다중 동의 수단 제공, 법정대리인 사전 인증 프로세스"
+  },
+  {
+    "id": "16",
+    "error_code": "MSA-016",
+    "error_name": "포팅 승인번호 만료",
+    "description": "번호이동 시 포팅 승인번호의 유효기간이 만료되어 발생하는 오류",
+    "symptoms": "번호이동 진행 시 '포팅 승인번호가 만료되었습니다' 알림",
+    "solution": "1. 새 포팅 승인번호 발급 요청 2. 기존 통신사 재연락 3. 유효기간 연장 신청 4. 긴급 포팅 절차 진행",
+    "category": "번호이동",
+    "severity": "중간",
+    "related_systems": "포팅승인관리시스템, 유효기간관리시스템, 통신사연동API",
+    "occurred_at": "2025-09-10T10:29:14Z",
+    "system_status": {
+      "포팅승인관리시스템": "정상",
+      "유효기간관리시스템": "정상",
+      "통신사연동API": "정상",
+      "자동알림시스템": "정상"
+    },
+    "system_resources": {
+      "포팅승인관리시스템": {
+        "cpu_usage": "44%",
+        "memory_usage": "51%",
+        "approval_processing": "680 cases/hour",
+        "expiry_tracking": "실시간"
+      },
+      "유효기간관리시스템": {
+        "cpu_usage": "31%",
+        "memory_usage": "37%",
+        "notification_rate": "95.3%",
+        "batch_processing": "정상"
+      },
+      "자동알림시스템": {
+        "cpu_usage": "28%",
+        "memory_usage": "33%",
+        "sms_delivery": "98.7%",
+        "email_delivery": "97.2%"
+      }
+    },
+    "monitoring_points": "승인번호 발급 처리시간, 유효기간 알림 전송률, 만료 전 안내율",
+    "prevention": "유효기간 만료 전 자동 알림, 연장 신청 간소화"
+  },
+  {
+    "id": "17",
+    "error_code": "MSA-017",
+    "error_name": "포팅 대상 번호 오류",
+    "description": "입력된 휴대폰 번호가 포팅 대상이 아니거나 형식이 잘못된 경우",
+    "symptoms": "번호 입력 시 '포팅할 수 없는 번호입니다' 오류 메시지",
+    "solution": "1. 휴대폰 번호 재확인 2. 기존 통신사 확인 3. 번호 활성화 상태 점검 4. 고객센터 통화 확인",
+    "category": "번호이동",
+    "severity": "높음",
+    "related_systems": "번호검증시스템, 통신사DB연동, 번호풀관리시스템",
+    "occurred_at": "2025-09-14T15:37:58Z",
+    "system_status": {
+      "번호검증시스템": "정상",
+      "통신사DB연동": "정상",
+      "번호풀관리시스템": "정상",
+      "실시간검증API": "정상"
+    },
+    "system_resources": {
+      "번호검증시스템": {
+        "cpu_usage": "59%",
+        "memory_usage": "64%",
+        "validation_rate": "1200 checks/min",
+        "accuracy": "99.1%"
+      },
+      "통신사DB연동": {
+        "cpu_usage": "47%",
+        "memory_usage": "53%",
+        "sync_frequency": "15분",
+        "data_consistency": "98.9%"
+      },
+      "번호풀관리시스템": {
+        "cpu_usage": "35%",
+        "memory_usage": "41%",
+        "available_numbers": "2.3M",
+        "allocation_rate": "450/hour"
+      }
+    },
+    "monitoring_points": "번호 검증 정확도, 통신사별 DB 동기화 상태, 특수번호 관리 현황",
+    "prevention": "실시간 번호 상태 검증, 통신사별 번호풀 정기 동기화"
+  },
+  {
+    "id": "18",
+    "error_code": "MSA-018",
+    "error_name": "포팅 명의자 불일치",
+    "description": "번호이동 신청자와 기존 통신사 명의자가 다를 때 발생하는 문제",
+    "symptoms": "명의 확인 시 '기존 명의자와 일치하지 않습니다' 오류",
+    "solution": "1. 기존 통신사 명의 확인 2. 명의변경 후 포팅 안내 3. 위임장 및 신분증 확인 4. 가족 관계 증명",
+    "category": "번호이동",
+    "severity": "높음",
+    "related_systems": "명의검증시스템, 통신사고객정보연동, 신분증인증시스템",
+    "occurred_at": "2025-09-03T08:52:41Z",
+    "system_status": {
+      "명의검증시스템": "정상",
+      "통신사고객정보연동": "일부지연",
+      "신분증인증시스템": "정상",
+      "위임장검증시스템": "정상"
+    },
+    "system_resources": {
+      "명의검증시스템": {
+        "cpu_usage": "53%",
+        "memory_usage": "58%",
+        "verification_time": "1.4s",
+        "match_accuracy": "97.6%"
+      },
+      "통신사고객정보연동": {
+        "cpu_usage": "82%",
+        "memory_usage": "87%",
+        "sync_delay": "2.1s",
+        "timeout_rate": "4.3%"
+      },
+      "위임장검증시스템": {
+        "cpu_usage": "39%",
+        "memory_usage": "44%",
+        "processing_rate": "180 docs/hour",
+        "fraud_detection": "활성화"
+      }
+    },
+    "monitoring_points": "명의 일치율, 통신사별 고객정보 동기화 지연시간, 위임장 처리 성공률",
+    "prevention": "통신사간 고객정보 표준화, 명의 불일치 사전 안내 시스템"
+  },
+  {
+    "id": "19",
+    "error_code": "MSA-019",
+    "error_name": "포팅 제한 번호",
+    "description": "특수 번호나 포팅이 제한된 번호에 대한 이동 시도 시 발생",
+    "symptoms": "포팅 신청 시 '포팅이 제한된 번호입니다' 안내 메시지",
+    "solution": "1. 번호 포팅 가능 여부 재확인 2. 대체 번호 발급 안내 3. 특수 번호 해제 절차 4. 신규 번호 선택 권유",
+    "category": "번호이동",
+    "severity": "중간",
+    "related_systems": "포팅제한관리시스템, 특수번호DB, 번호정책시스템",
+    "occurred_at": "2025-09-12T12:16:07Z",
+    "system_status": {
+      "포팅제한관리시스템": "정상",
+      "특수번호DB": "정상",
+      "번호정책시스템": "정상",
+      "방송통신위원회연동": "정상"
+    },
+    "system_resources": {
+      "포팅제한관리시스템": {
+        "cpu_usage": "32%",
+        "memory_usage": "38%",
+        "restriction_checks": "340/hour",
+        "policy_updates": "일일 1회"
+      },
+      "특수번호DB": {
+        "cpu_usage": "25%",
+        "memory_usage": "31%",
+        "database_size": "150GB",
+        "query_time": "0.1s"
+      },
+      "번호정책시스템": {
+        "cpu_usage": "41%",
+        "memory_usage": "47%",
+        "policy_enforcement": "자동화",
+        "compliance_rate": "99.8%"
+      }
+    },
+    "monitoring_points": "포팅 제한 번호 관리 정확도, 특수번호 분류 체계, 정책 업데이트 반영률",
+    "prevention": "포팅 제한 번호 사전 안내, 정책 변경사항 실시간 반영"
+  },
+  {
+    "id": "20",
+    "error_code": "MSA-020",
+    "error_name": "기존 통신사 해지 미완료",
+    "description": "기존 통신사에서 정상적으로 해지 처리가 되지 않아 포팅이 불가능한 상황",
+    "symptoms": "포팅 시도 시 '기존 통신사 해지가 완료되지 않았습니다' 메시지",
+    "solution": "1. 기존 통신사 해지 상태 확인 2. 미납금 정산 처리 3. 강제 해지 신청 4. 해지 증명서 발급",
+    "category": "번호이동",
+    "severity": "높음",
+    "related_systems": "해지관리시스템, 통신사정산시스템, 미납금관리시스템",
+    "occurred_at": "2025-09-05T17:24:13Z",
+    "system_status": {
+      "해지관리시스템": "정상",
+      "통신사정산시스템": "정상",
+      "미납금관리시스템": "정상",
+      "자동해지프로세스": "정상"
+    },
+    "system_resources": {
+      "해지관리시스템": {
+        "cpu_usage": "46%",
+        "memory_usage": "52%",
+        "termination_rate": "520 cases/hour",
+        "completion_rate": "94.7%"
+      },
+      "통신사정산시스템": {
+        "cpu_usage": "68%",
+        "memory_usage": "74%",
+        "settlement_processing": "1.8M transactions/day",
+        "reconciliation": "자동화"
+      },
+      "미납금관리시스템": {
+        "cpu_usage": "43%",
+        "memory_usage": "49%",
+        "outstanding_amount": "₩2.3B",
+        "recovery_rate": "68.4%"
+      }
+    },
+    "monitoring_points": "해지 처리 완료율, 정산 처리 시간, 미납금 확인 정확도",
+    "prevention": "해지 전 미납금 사전 안내, 자동 정산 시스템 고도화"
+  },
+  {
+    "id": "21",
+    "error_code": "MSA-021",
+    "error_name": "동시 포팅 신청 오류",
+    "description": "동일 번호에 대해 여러 통신사로 동시에 포팅 신청이 들어온 경우",
+    "symptoms": "포팅 처리 중 '중복 포팅 신청이 감지되었습니다' 경고",
+    "solution": "1. 다른 포팅 신청 취소 확인 2. 우선순위 포팅 처리 3. 고객 의사 재확인 4. 기존 신청 철회 절차",
+    "category": "번호이동",
+    "severity": "중간",
+    "related_systems": "중복신청방지시스템, 포팅우선순위관리, 신청취소시스템",
+    "occurred_at": "2025-09-08T14:03:55Z",
+    "system_status": {
+      "중복신청방지시스템": "정상",
+      "포팅우선순위관리": "정상",
+      "신청취소시스템": "정상",
+      "실시간모니터링": "정상"
+    },
+    "system_resources": {
+      "중복신청방지시스템": {
+        "cpu_usage": "37%",
+        "memory_usage": "43%",
+        "duplicate_detection": "99.2%",
+        "real_time_scanning": "활성화"
+      },
+      "포팅우선순위관리": {
+        "cpu_usage": "29%",
+        "memory_usage": "34%",
+        "priority_queue": "45 items",
+        "processing_time": "0.3s"
+      },
+      "실시간모니터링": {
+        "cpu_usage": "51%",
+        "memory_usage": "57%",
+        "alert_generation": "자동화",
+        "dashboard_updates": "5초"
+      }
+    },
+    "monitoring_points": "중복 신청 감지율, 포팅 신청 취소 처리시간, 우선순위 결정 정확도",
+    "prevention": "실시간 중복 신청 감지, 포팅 신청 시 기존 신청 자동 확인"
+  },
+  {
+    "id": "22",
+    "error_code": "MSA-022",
+    "error_name": "포팅 수수료 결제 실패",
+    "description": "번호이동 수수료 결제 과정에서 발생하는 결제 오류",
+    "symptoms": "수수료 결제 시 '결제 처리에 실패했습니다' 오류 메시지",
+    "solution": "1. 결제수단 재확인 2. 카드 한도 및 잔액 점검 3. 대체 결제방법 안내 4. 현금 결제 옵션 제공",
+    "category": "번호이동",
+    "severity": "중간",
+    "related_systems": "포팅수수료결제시스템, 결제게이트웨이, 카드사연동",
+    "occurred_at": "2025-09-11T11:48:26Z",
+    "system_status": {
+      "포팅수수료결제시스템": "정상",
+      "결제게이트웨이": "정상",
+      "카드사연동": "일부지연",
+      "현금결제시스템": "정상"
+    },
+    "system_resources": {
+      "포팅수수료결제시스템": {
+        "cpu_usage": "42%",
+        "memory_usage": "48%",
+        "fee_processing": "280 payments/hour",
+        "success_rate": "96.8%"
+      },
+      "결제게이트웨이": {
+        "cpu_usage": "65%",
+        "memory_usage": "71%",
+        "transaction_volume": "₩125M/day",
+        "payment_methods": "12개"
+      },
+      "카드사연동": {
+        "cpu_usage": "77%",
+        "memory_usage": "82%",
+        "approval_delay": "1.8s",
+        "retry_rate": "8.3%"
+      }
+    },
+    "monitoring_points": "포팅 수수료 결제 성공률, 결제 처리 시간, 카드사별 승인률",
+    "prevention": "다중 결제 수단 제공, 결제 실패 시 자동 재시도"
+  },
+  {
+    "id": "23",
+    "error_code": "MSA-023",
+    "error_name": "USIM 카드 불량",
+    "description": "새로 발급된 USIM 카드 자체의 물리적 결함으로 인한 활성화 실패",
+    "symptoms": "USIM 삽입 후 '카드를 읽을 수 없습니다' 또는 'SIM 오류' 표시",
+    "solution": "1. USIM 카드 접촉부 청소 2. 카드 재삽입 시도 3. 다른 기기에서 테스트 4. 새 USIM 카드 교체 발급",
+    "category": "기기변경",
+    "severity": "높음",
+    "related_systems": "USIM발급시스템, 품질관리시스템, 재고관리시스템",
+    "occurred_at": "2025-09-16T07:31:19Z",
+    "system_status": {
+      "USIM발급시스템": "정상",
+      "품질관리시스템": "정상",
+      "재고관리시스템": "정상",
+      "불량품추적시스템": "정상"
+    },
+    "system_resources": {
+      "USIM발급시스템": {
+        "cpu_usage": "38%",
+        "memory_usage": "44%",
+        "issuance_rate": "650 cards/hour",
+        "batch_tracking": "실시간"
+      },
+      "품질관리시스템": {
+        "cpu_usage": "31%",
+        "memory_usage": "37%",
+        "defect_rate": "0.8%",
+        "quality_score": "98.7%"
+      },
+      "불량품추적시스템": {
+        "cpu_usage": "26%",
+        "memory_usage": "32%",
+        "tracking_accuracy": "99.5%",
+        "recall_processing": "자동화"
+      }
+    },
+    "monitoring_points": "USIM 불량률, 배치별 품질 지표, 교체 발급 처리시간",
+    "prevention": "USIM 출고 전 품질 검사 강화, 배치별 품질 추적 시스템"
+  },
+  {
+    "id": "24",
+    "error_code": "MSA-024",
+    "error_name": "기기 IMEI 등록 실패",
+    "description": "새 기기의 IMEI 정보가 네트워크에 정상 등록되지 않는 문제",
+    "symptoms": "기기변경 후 '네트워크 서비스를 사용할 수 없습니다' 메시지",
+    "solution": "1. IMEI 번호 정확성 확인 2. 기기 인증 상태 점검 3. 네트워크 재등록 시도 4. 기기 펌웨어 업데이트",
+    "category": "기기변경",
+    "severity": "높음",
+    "related_systems": "IMEI관리시스템, 기기인증서버, 네트워크등록시스템",
+    "occurred_at": "2025-09-07T13:14:52Z",
+    "system_status": {
+      "IMEI관리시스템": "정상",
+      "기기인증서버": "높은부하",
+      "네트워크등록시스템": "정상",
+      "국제IMEI데이터베이스": "정상"
+    },
+    "system_resources": {
+      "IMEI관리시스템": {
+        "cpu_usage": "49%",
+        "memory_usage": "55%",
+        "registration_rate": "890 devices/hour",
+        "database_size": "45TB"
+      },
+      "기기인증서버": {
+        "cpu_usage": "92%",
+        "memory_usage": "89%",
+        "authentication_queue": "234",
+        "processing_delay": "4.2s"
+      },
+      "네트워크등록시스템": {
+        "cpu_usage": "56%",
+        "memory_usage": "62%",
+        "registration_success": "97.3%",
+        "sync_frequency": "실시간"
+      }
+    },
+    "monitoring_points": "IMEI 등록 성공률, 기기 인증 처리시간, 네트워크 등록 지연시간",
+    "prevention": "IMEI 사전 검증 시스템, 기기 인증 서버 용량 증설"
+  },
+  {
+    "id": "25",
+    "error_code": "MSA-025",
+    "error_name": "기기 잠금 해제 실패",
+    "description": "통신사 잠금이 걸린 기기의 해제 과정에서 발생하는 오류",
+    "symptoms": "기기 부팅 시 '이 기기는 다른 통신사에서 사용할 수 없습니다' 메시지",
+    "solution": "1. 기기 잠금 해제 코드 확인 2. 제조사 언락 서비스 이용 3. 기기 구매 증명서 확인 4. 수동 언락 절차 진행",
+    "category": "기기변경",
+    "severity": "중간",
+    "related_systems": "기기잠금관리시스템, 언락코드생성시스템, 제조사연동API",
+    "occurred_at": "2025-09-02T16:59:38Z",
+    "system_status": {
+      "기기잠금관리시스템": "정상",
+      "언락코드생성시스템": "정상",
+      "제조사연동API": "일부지연",
+      "기기인증시스템": "정상"
+    },
+    "system_resources": {
+      "기기잠금관리시스템": {
+        "cpu_usage": "33%",
+        "memory_usage": "39%",
+        "unlock_requests": "180/hour",
+        "success_rate": "94.2%"
+      },
+      "언락코드생성시스템": {
+        "cpu_usage": "28%",
+        "memory_usage": "34%",
+        "code_generation": "0.5s",
+        "security_level": "AES-256"
+      },
+      "제조사연동API": {
+        "cpu_usage": "71%",
+        "memory_usage": "76%",
+        "api_response_time": "3.1s",
+        "manufacturer_coverage": "98%"
+      }
+    },
+    "monitoring_points": "언락 성공률, 코드 생성 시간, 제조사 API 응답률",
+    "prevention": "사전 언락 확인 프로세스, 제조사별 언락 정책 실시간 업데이트"
+  },
+  {
+    "id": "26",
+    "error_code": "MSA-026",
+    "error_name": "기기 소프트웨어 호환성 오류",
+    "description": "기기의 소프트웨어 버전이 현재 네트워크와 호환되지 않는 문제",
+    "symptoms": "데이터 연결 시 '네트워크 설정을 확인하세요' 반복 메시지",
+    "solution": "1. 기기 소프트웨어 업데이트 2. APN 설정 재구성 3. 네트워크 모드 변경 4. 호환 가능 기기로 교체",
+    "category": "기기변경",
+    "severity": "높음",
+    "related_systems": "HLR서버, USIM관리시스템, 네트워크인증서버",
+    "occurred_at": "2025-09-08T16:12:48Z",
+    "system_status": {
+      "HLR서버": "정상",
+      "USIM관리시스템": "정상",
+      "네트워크인증서버": "높은부하",
+      "코어네트워크": "정상"
+    },
+    "system_resources": {
+      "HLR서버": {
+        "cpu_usage": "67%",
+        "memory_usage": "74%",
+        "transaction_rate": "2400 tps",
+        "database_connections": "145/200"
+      },
+      "USIM관리시스템": {
+        "cpu_usage": "43%",
+        "memory_usage": "58%",
+        "processing_queue": "23",
+        "success_rate": "96.5%"
+      },
+      "네트워크인증서버": {
+        "cpu_usage": "91%",
+        "memory_usage": "87%",
+        "response_time": "3.2s",
+        "concurrent_sessions": "4800/5000"
+      }
+    },
+    "monitoring_points": "HLR 등록 성공률, USIM 활성화 시간, 네트워크 인증 지연시간",
+    "prevention": "HLR 서버 용량 모니터링, USIM 배치별 품질 검사 강화"
+  }
+]
