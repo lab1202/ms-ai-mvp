@@ -31,71 +31,6 @@ MSA 환경에서 모바일 개통 시 발생하는 에러들을 분석하고 해
 Slack 채널 메시지 화면
 ![Slack 채널화면](<./assets/ms-ai-mvp4.png>)
 
-## 🛠️ 시스템 구성
-
-```
-aira-system/
-├── app.py                 # 메인 애플리케이션 (시스템 상태 모니터링 추가)
-├── update_data.py         # 데이터 업데이트 스크립트
-├── requirements.txt       # Python 패키지 의존성
-├── .env                   # 환경 변수 템플릿
-├── .gitignore             # Git 제외 파일 목록
-├── data/
-│   └── error_data.json   # MSA 핸드폰 개통 에러 데이터 (30건, 시스템 상태 포함)
-└── README.md            # 프로젝트 설명
-```
-
-## ⚙️ 설치 및 설정
-
-### 1. Python 환경 확인
-- Python 3.13+ 권장
-- pip 패키지 매니저 필요
-
-### 2. 프로젝트 설정
-
-```bash
-# 저장소 클론 또는 파일 다운로드
-git clone https://github.com/lab1202/ms-ai-mvp.git
-cd ms-ai-mvp
-
-# 새 가상환경 생성
-python3 -m venv venv
-source venv/bin/activate
-
-# 환경 변수 파일 생성
-cp .env.example .env
-# .env 파일을 열어서 Azure 리소스 정보 입력
-```bash
-# Azure OpenAI 설정
-AZURE_OPENAI_ENDPOINT=https://your-openai-resource.openai.azure.com/
-AZURE_OPENAI_API_KEY=your-api-key-here
-AZURE_OPENAI_DEPLOYMENT_NAME=
-AZURE_OPENAI_API_VERSION=
-
-# Azure Search 설정
-AZURE_SEARCH_SERVICE_ENDPOINT=https://your-search-service.search.windows.net
-AZURE_SEARCH_ADMIN_KEY=your-admin-key-here
-AZURE_SEARCH_INDEX_NAME=
-```
-
-## 🚀 시스템 실행
-
-```bash
-./streamlit.sh  # 실행 (의존성 생성 포함)
-# 의존성 생성이 되어있다면
-streamlit run app.py
-```
-
-로컬환경 실행 시 브라우저에서 `http://localhost:8000`으로 접속하여 시스템을 사용할 수 있습니다.
-
-## 🔄 데이터 업데이트
-
-새로운 에러 데이터로 업데이트하려면:
-
-```bash
-python update_data.py
-```
-
 ## 💡 사용 방법
 
 1. **에러 문의**: 채팅창에 발생한 문제나 에러 코드를 입력
@@ -148,7 +83,7 @@ python update_data.py
 - 데이터 백업 복원 실패 (MSA-027)
 - 기기 보안 설정 충돌 (MSA-028)
 
-## 🖥️ 시스템 상태 모니터링 (NEW!)
+## 🖥️ 시스템 상태 모니터링
 
 ### 실시간 상태 확인
 - **전체 시스템 개수**: 연관된 모든 시스템 수
@@ -167,6 +102,87 @@ python update_data.py
 - **결제 관련**: 결제게이트웨이, 금융기관API, 카드사시스템
 - **네트워크**: HLR서버, 네트워크인증서버, 로드밸런서
 - **관리 시스템**: 고객정보DB, 재고관리시스템, 과금시스템
+
+## 🏗️ 아키텍처
+
+```
+[사용자] ↔ [Streamlit UI] ↔ [검색 로직] ↔ [Azure Search]
+                ↓
+         [OpenAI GPT-4o-mini] ← [컨텍스트 구성]
+       
+       → [Slack]
+```
+
+## 🛠️ 시스템 구성
+
+```
+aira-system/
+├── app.py                 # 메인 애플리케이션 (시스템 상태 모니터링 추가)
+├── update_data.py         # 데이터 업데이트 스크립트
+├── requirements.txt       # Python 패키지 의존성
+├── .env                   # 환경 변수 템플릿
+├── .gitignore             # Git 제외 파일 목록
+├── data/
+│   └── error_data.json   # MSA 핸드폰 개통 에러 데이터 (30건, 시스템 상태 포함)
+└── README.md            # 프로젝트 설명
+```
+
+## ⚙️ 설치 및 설정
+
+### 1. Python 환경 확인
+- Python 3.13+ 권장
+- pip 패키지 매니저 필요
+
+### 2. 프로젝트 설정
+
+```bash
+# 저장소 클론 또는 파일 다운로드
+git clone https://github.com/lab1202/ms-ai-mvp.git
+cd ms-ai-mvp
+
+# 새 가상환경 생성
+python3 -m venv venv
+source venv/bin/activate
+
+# 환경 변수 파일 생성
+cp .env.example .env
+# .env 파일을 열어서 Azure 리소스 정보 입력
+```bash
+# Azure OpenAI 설정
+AZURE_OPENAI_ENDPOINT=https://your-openai-resource.openai.azure.com/
+AZURE_OPENAI_API_KEY=your-api-key-here
+AZURE_OPENAI_DEPLOYMENT_NAME=
+AZURE_OPENAI_API_VERSION=
+
+# Azure Search 설정
+AZURE_SEARCH_SERVICE_ENDPOINT=https://your-search-service.search.windows.net
+AZURE_SEARCH_ADMIN_KEY=your-admin-key-here
+AZURE_SEARCH_INDEX_NAME=
+
+# Slack Webhook URL
+SLACK_WEBHOOK_URL=
+
+```
+
+## 🚀 시스템 실행
+
+```bash
+./streamlit.sh  # 실행 (의존성 생성 포함)
+# 의존성 생성이 되어있다면
+streamlit run app.py
+```
+
+로컬환경 실행 시 브라우저에서 `http://localhost:8000`으로 접속하여 시스템을 사용할 수 있습니다.
+
+## 🔄 데이터 업데이트
+
+새로운 에러 데이터로 업데이트하려면:
+
+```bash
+python update_data.py
+```
+
+
 
 ## 🔧 트러블슈팅
 
@@ -207,11 +223,3 @@ python update_data.py
 ### 새로운 에러 유형 추가
 1. `data/error_data.json`에 새 에러 정보 추가 (시스템 상태 정보 포함)
 2. `python update_data.py` 실행하여# 🔍 AIRA 이상징후 현황 조회 시스템
-
-## 🏗️ 아키텍처
-
-```
-[사용자] ↔ [Streamlit UI] ↔ [검색 로직] ↔ [Azure Search]
-                ↓
-         [OpenAI GPT-4o-mini] ← [컨텍스트 구성]
-```
