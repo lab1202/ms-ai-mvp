@@ -8,10 +8,15 @@ MSA 환경에서 모바일 개통 시 발생하는 에러들을 분석하고 해
 
 - **실시간 에러 검색**: Azure Search를 통한 빠른 에러 정보 검색
 - **AI 기반 해결책 제공**: Azure OpenAI를 활용한 맞춤형 해결 방법 제안
-- **시스템 상태 모니터링**: 실시간 관련 시스템 상태 확인 (NEW!)
+- **시스템 상태 모니터링**: 실시간 관련 시스템 상태 확인
 - **다양한 개통 유형 지원**: 신규개통, 번호이동, 기기변경 에러 커버
 - **직관적인 채팅 인터페이스**: Streamlit 기반의 사용자 친화적 UI
 - **Slack Webhook 연동** : 검색 결과를 Slack 채널로 전송
+
+## 최종 목표 시스템
+- 현재 팀에서 운영중인 모니터링 시스템에 AI Assistant 기능 적용으로 원인 분석 및 조치 시간 단축
+- Teams IT상황창에 이상징후가 등록되면 인지하여 해당 시간대 시스템 상황, 외부시스템 연동 현황 등 종합적으로 분석하여 점검 포인트 및 조치 방법 가이드
+- 운영자가 조치방법 선택 시 자동 조치 적용 후 Template 기반 결과 보고서 자동 생성
 
 ## MVP 시나리오
 1. Teams IT상황창에서 이상 징후를 자동 감지하고, 해당 서버·서비스의 상태 정보를 수집하여 AI 기반 Root Cause 분석 (MVP에서는 Teams 대신 채팅창 입력으로 수행)
@@ -116,16 +121,23 @@ Slack 채널 메시지 화면
 ## 🛠️ 시스템 구성
 
 ```
-aira-system/
-├── app.py                 # 메인 애플리케이션 (시스템 상태 모니터링 추가)
-├── update_data.py         # 데이터 업데이트 스크립트
-├── requirements.txt       # Python 패키지 의존성
-├── .env                   # 환경 변수 템플릿
-├── .gitignore             # Git 제외 파일 목록
+ms-ai-mvp/
+├── app.py                    # 메인 애플리케이션 (시스템 상태 모니터링 추가)
+├── update_data.py            # 데이터 업데이트 스크립트
+├── requirements.txt          # Python 패키지 의존성
+├── streamlit.sh              # Azure 환경 배포용 Python 패키지 의존성 설치 및 실행 (최초 실행 시 사용)
+├── run.sh                    # 로컬에서 Streamlit 실행
+├── .env.example              # 환경 변수 템플릿
+├── .gitignore                # Git 제외 파일 목록
 ├── data/
-│   └── error_data.json   # MSA 핸드폰 개통 에러 데이터 (30건, 시스템 상태 포함)
-└── README.md            # 프로젝트 설명
+│   └── error_data.json       # 모바일 개통 에러 데이터 (30건, 시스템 상태 포함)
+├── test/
+│   └── data_test.py          # 테스트 데이터 JSON 포맷 점검
+│   └── debug_connection.py   # Azure 연결 테스트
+│   └── debug_test.py         # Azure Search 연결 테스트
+└── README.md                 # 프로젝트 설명
 ```
+
 
 ## ⚙️ 설치 및 설정
 
@@ -169,57 +181,12 @@ SLACK_WEBHOOK_URL=
 ```bash
 ./streamlit.sh  # 실행 (의존성 생성 포함)
 # 의존성 생성이 되어있다면
-streamlit run app.py
+./run.sh
 ```
 
 로컬환경 실행 시 브라우저에서 `http://localhost:8000`으로 접속하여 시스템을 사용할 수 있습니다.
 
-## 🔄 데이터 업데이트
+## 🔄 새로운 에러 데이터 업데이트
 
-새로운 에러 데이터로 업데이트하려면:
-
-```bash
-python update_data.py
-```
-
-
-
-## 🔧 트러블슈팅
-
-### 일반적인 문제 해결
-
-1. **Azure Search 연결 오류**
-   ```bash
-   # Azure Search 서비스 상태 확인
-   # .env 파일의 AZURE_SEARCH_* 설정 재확인
-   python setup_search.py
-   ```
-
-2. **OpenAI API 오류**
-   ```bash
-   # API 키와 엔드포인트 확인
-   # 배포 모델명 확인 (gpt-4o-mini)
-   ```
-
-3. **데이터 업로드 실패**
-   ```bash
-   # data/error_data.json 파일 존재 확인
-   # JSON 형식 유효성 검증
-   python -m json.tool data/error_data.json
-   ```
-
-4. **시스템 상태 표시 안됨**
-   ```bash
-   # 사이드바에서 "상태 갱신" 버튼 클릭
-   # 또는 "데이터 갱신" 버튼 클릭
-   ```
-
-### 로그 확인
-- Streamlit 콘솔에서 에러 메시지 확인
-- Azure Portal에서 Search Service 로그 확인
-
-## 📈 시스템 확장
-
-### 새로운 에러 유형 추가
 1. `data/error_data.json`에 새 에러 정보 추가 (시스템 상태 정보 포함)
-2. `python update_data.py` 실행하여# 🔍 AIRA 이상징후 현황 조회 시스템
+2. `python update_data.py` 실행하여 azure index 반영
